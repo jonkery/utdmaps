@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  
+	<title>Campus Map - The University of Texas at Dallas</title>
+	<link rel='stylesheet' type='text/css' href='css/map.css?v=123' />
+	<script src='https://www.utdallas.edu/websvcs/shared/jquery-1.11.0.min.js'></script>
+	<script src='https://www.utdallas.edu/websvcs/shared/jquery-ui-1.10.4.custom.min.js'></script>
+	<script src='js/switchButton.js'></script>
+	<script src='js/hoverIntent.js'></script>
+    <script src='js/kinetic.js'></script>
+	<script src='js/buildings.json?v=123'></script>
+	<script src='js/campusmap.js?v=234'></script>
+	
+	<meta name='author' content='UT Dallas' />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<meta name="WT.cg_n" content="Gateway">
+	<meta name="WT.cg_s" content="Campus Map">
+	<meta name="WT.cg_s" content="Campus Map New">
+	
+	<link rel='canonical' href='/maps/' />
+
+	
+	<script type='text/javascript'>
+		if(  navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/android/i) || navigator.userAgent.match(/opera mini/i) ) {
+			window.location = '/mobile/maps.php';
+		}else if(navigator.userAgent.match(/iPad/i)){
+			//window.location = '/mobile/maps.php';
+		}
+
+			var buildingX = 590;
+			var buildingY = 125;
+			var rhX = 592;
+			var rhY = 120;
+			var pX = 590;
+			var pY = 123;
+			var s = 3;
+			var op = 0;
+		
+	
+    </script>
+	<script src='js/map.js'></script>
+  </head>
+  
+  <body>
+	<div id='header'>
+		<div id='header-container'>
+			<a id='logo' href='/'><img src='images/logo.png' /></a>
+			<a id='map-logo' href='index.html'><img src = 'images/map-logo.png' /></a>
+			<div id='icons'>
+				<img id='map-menu' src='images/menu.png' />
+				<img id='map-search' src='images/search.png' />
+			</div>
+			<br style='clear:both;' />
+		</div>
+		<div id='print'><img src='images/print-logo.png' /></div>
+	</div>
+
+
+	<div id='wrapper'>
+
+		<div id='selections'>
+			<div id='search-container' >
+				<form>
+					<input type='text'  onclick="this.value=''" id='search' value='Search Map' />
+					<input type='button' id='go' />
+				</form>
+				<div id='results'></div>
+			</div>
+			<ul>
+				<li class='choices' id='buildings'>Buildings/Locations  <img class='arrow' src='images/arrow.png' />
+					<ul class='lists' id='buildingDisplayList'></ul>
+				</li>
+				<li class='choices' id='buildings-smaller'>Buildings/Locations <img class='arrow' src='images/arrow.png' />
+					<ul class='lists' id='buildingDisplayList-smaller'></ul>
+				</li>
+				<li class='choices' id='housing'>Housing <img class='arrow' src='images/arrow.png' />
+					<ul class='lists' id='villageDisplayList'></ul>
+					<ul class='lists' id='commonsDisplayList'></ul>
+					<ul class='lists' id='canyonDisplayList'></ul>
+				</li>
+				<li class='choices' id='housing-smaller'>Housing <img class='arrow' src='images/arrow.png' />
+					
+					<ul class='lists' id='villageDisplayList-smaller'></ul>
+					<ul class='lists' id='commonsDisplayList-smaller'></ul>
+					<ul class='lists' id='canyonDisplayList-smaller'></ul>
+				</li>
+				<li class='choices' id='parking'>Parking/Transportation <img class='arrow' src='images/arrow.png' />
+					<div class='lists' id='parking-options'>
+						<div id='visitors'><img src='images/visitor.png' />Visitor Parking <div class='onoff'><input class='common checkbox' id='visitors-checkbox' type='checkbox' value='1' /></div></div>
+						<!--<div id='busstops'><img src='images/bus.png' />Bus Stops <div class='onoff'><input class='checkbox' id='busstops-checkbox' type='checkbox' value='1' /></div></div>-->
+						<div id='construction'><img src='images/construction.png' />Construction <div class='onoff'><input class='checkbox' id='construction-checkbox' type='checkbox' value='1' /></div></div>
+						<div id='service'><img src='images/service-roads.png' />Service Roads <div class='onoff'><input class='checkbox' id='service-checkbox' type='checkbox' value='1' /></div></div>
+						<div id='zipcars'><img src='images/zipcar.png' />Zip Cars <div class='onoff'><input class='checkbox' id='zipcars-checkbox' type='checkbox' value='1' /></div></div>
+						<div id='clear-all-parking'>Clear All</div>
+					</div>
+				</li>
+				<li class='choices' id='options-choice' >Campus Amenities <img class='arrow' src='images/arrow.png' />
+					<div class='lists' id='options'>
+						<div id='dining'><img src='images/dining.png' />Dining <div class='onoff'><input class='checkbox' id='dining-checkbox' type='checkbox' value='1' /></div></div>
+						<div id='skybridge'><img src='images/skybridge.png' />Sky Bridge <div class='onoff'><input class='checkbox' id='skybridge-checkbox' type='checkbox' value='1' /></div></div>
+						<div id='bathroom'><img src='images/unisex.png' /><span>Gender Neutral<br />Bathroom</span><div class='onoff'><input class='checkbox' id='bathroom-checkbox' type='checkbox' value='1' /></div></div>
+						
+						<div id='charging' style='clear:both;'><img src='images/charging.png' />Charging <div class='onoff'><input class='checkbox' id='charging-checkbox' type='checkbox' value='1' /></div></div>
+						
+						<div id='clear-options'>Clear All</div>
+					</div>
+				</li>
+			</ul>
+			<div id='questions' style="font-size: .85em; color: black; font-family: 'DINPRO'; font-weight: normal;">
+				Updates or corrections? Email <a style='color: #008542;' href="/cdn-cgi/l/email-protection#3717405255535241525b5847524577424353565b5b564419525342"><span class="__cf_email__" data-cfemail="cdbaa8afa9a8bba8a1a2bda8bf8db8b9a9aca1a1acbee3a8a9b8">[email&#160;protected]</span></a>.
+			</div>
+		</div>
+		
+
+
+		<div id='map-container'>
+			<div id='roads' style="font-family: 'DINPro-Regular'";>
+				<div id='infobox'><div class='mobile' id='closeInfoBox'>Close Box</div><div id='infoBoxContainer'></div></div>
+				<div id="container"></div>
+				<div id='abb'><img src='images/abb.png'></div>
+				<div id='here'><img src='images/here.png' /></div>
+			</div>
+			<div id='content-blank' style='cursor: text;'>
+				<div>
+				</div>
+				<div id='pardon'>
+		
+					<p><a href='/pardonourprogress/'>Pardon Our Progress</a></p>
+					<a href='/news/2017/8/17-32657_University-Unveils-New-Alumni-Center-Housing-Adds-_story-wide.html?WT.mc_id=MapsPage'>University Unveils New Alumni Center, Housing, Adds Dining Options</a><br />
+<a href='/news/2017/8/17-32656_University-Rolls-Out-Transportation-Parking-Upgrad_story-sidebar.html?WT.mc_id=MapsPage'>University Rolls Out Transportation, Parking Upgrades for Start of Fall 2017 Semester</a><br />
+<a href='/mapsinclude/Skybridges-Fall-2015.pdf'>Printable Skybridge Map</a><br />
+<a href='/pardonourprogress'>Recent Updates</a>
+
+<br />
+	
+
+				</div>
+				
+				<p style='margin-top: 0px; padding-top: 0px;'>For mailing and shipping addresses, see the <a href="/contact/">Contact Information</a> page. For more information on how to get to the campus, visit the <a href="/directions/">Directions to UT Dallas</a> page.</p>
+					<p><a href='https://www.google.com/maps/dir//University+of+Texas+at+Dallas,+800+W+Campbell+Rd,+Richardson,+TX+75080/@32.9843513,-96.7481192,17z/data=!4m13!1m4!3m3!1s0x864c21ff895e4aa5:0xd9098b32e9aa1331!2sUniversity+of+Texas+at+Dallas!3b1!4m7!1m0!1m5!1m1!1s0x864c21ff895e4aa5:0xd9098b32e9aa1331!2m2!1d-96.7459305!2d32.9843468'>800 West Campbell Road<br>
+					Richardson, TX 75080</a></p>
+					<p>Visitors to the campus should obtain a parking pass from the Visitor Center and University Bookstore Building located just west of the Roundabout. Contact UTD's main switchboard at (972) 883-2111 for more information.</p>
+					<p>Two printable versions of the campus map are available for download. These PDFs can be enlarged on mobile devices.</p>
+					<p><a onclick="dcsMultiTrack('DCS.dcssip', 'www.utdallas.edu', 'DCS.dcsuri', '/pdf/campusmap.html', 'WT.ti', 'UT Dallas Campus Map');" href="/pdf/campusmap.pdf">Printable Campus Map</a> <img src="http://www.utdallas.edu/images/bitmaps/acrobat.gif" alt="" width="16" height="16" align="absmiddle"><br>
+					<a onclick="dcsMultiTrack('DCS.dcssip', 'www.utdallas.edu', 'DCS.dcsuri', '/pdf/campusmap.html', 'WT.ti', 'UT Dallas Campus Map');" href="/services/download/Parking_Map.pdf">Printable Parking Map</a> <img src="http://www.utdallas.edu/images/bitmaps/acrobat.gif" alt="" width="16" height="16" align="absmiddle">
+					</p>
+					<p><a name="calliermap" id="calliermap" href="/maps/callier.html">Map of the Callier Center Dallas Campus</a><br />
+					<a href="http://www.brainhealth.utdallas.edu/index.php/contact/">Map of Center for BrainHealth</a><br />
+					<a href="http://vitallongevity.utdallas.edu/contact-us">Map of Center for Vital Longevity</a><br />
+					
+					<a href="http://www.collin.edu/chec/maps.html">Map of Collin Higher Education Center</a><br />
+					<a href="http://www.utdallas.edu/virtualtour/">Virtual Campus Tour</a></p>
+			</div>
+		</div>
+
+		<br style='clear:both;' />
+		
+		<div id='locator'>
+			<div id='locator-load'></div>
+		</div>
+
+	</div>
+	<div id='footer'>
+		<div class='mobile'>
+			<div><img src='images/acrobat.gif'> <a href='/pdf/campusmap.pdf'>Download Printed Map</a> <img src='images/acrobat.gif' /> <a href='/services/download/Parking_Map.pdf'>Download Parking Map</a></div>
+			<div><a href='/virtualtour/'>Take a Virtual Tour</a></div>
+		</div>
+		<div class='desktop'>
+		<div id="footer">
+			<a class="wordmark" href="/">The University of Texas at Dallas</a>
+			<a class="skip" name="footer"></a>
+			<footer>
+				
+<ul id="footernav">
+<li class="footer-first"><a id="about" href="/about/">About UT Dallas</a>
+<ul>
+<li><a href="/administrative-offices/">Administrative Offices</a></li>
+<li><a href="/contact/">Contact Information</a></li>
+<li><a href="/create/">History</a></li>
+<li><a href="/pardonourprogress/">Pardon Our Progress</a></li>
+<li><a href="/publications/">Publications</a></li>
+</ul>
+</li>
+<li class="footer-first"><a id="academics" href="/academics/">Academics</a>
+<ul>
+<li><a href="/academics/">Academic Programs</a></li>
+<li><a href="https://catalog.utdallas.edu/">Catalogs</a></li>
+<li><a href="/library/">Library</a></li>
+<li><a href="https://research.utdallas.edu">Research</a></li>
+<li><a href="/schools/">Schools</a></li>
+</ul>
+</li>
+<li class="footer-first"><a id="admissions" href="/admissions/">Admissions</a>
+<ul>
+<li><a href="/apply/">Apply to UT Dallas</a></li>
+<li><a href="/status/">Application Status</a></li>
+<li><a href="/enroll/">Freshman/Transfer</a></li>
+<li><a href="/admissions/graduate/">Graduate</a></li>
+<li><a href="/admissions/professional/">Professional/Executive</a></li>
+</ul>
+</li>
+<li class="footer-first"><a id="life" href="/campuslife/">Campus Life</a>
+<ul>
+<li><a href="/athletics/">Athletics</a></li>
+<li><a href="/spirit/">Comet Spirit</a></li>
+<li><a href="/housing/">Housing</a></li>
+<li><a href="/news/thisweek/">This Week at UT Dallas</a></li>
+<li><a href="/sof/">Student Organizations</a></li>
+</ul>
+</li>
+<li class="footer-first"><a id="gift" href="/development/">Development</a>
+<ul>
+<li><a href="/development/giving/ways-to-give/">Ways to Give</a></li>
+<li><a href="http://utdallas.plannedgiving.org/">Planned Giving</a></li>
+<li><a href="/corporate">Corporate Relations</a></li>
+<li><a href="/strategicplan/">Strategic Plan</a></li>
+<li><a href="/enhance/">Campus Enhancement</a></li>
+</ul>
+</li>
+</ul>
+<div class="footer-bottom" style='line-height:1.5'>
+<p id='mod-date' style='font-size: 100%'>This page last updated: <label id="lastModified"></label> | <a href="/comments/">Questions or comments</a> about this page?</p>
+<p>© The University of Texas at Dallas | 800 W. Campbell Road, Richardson, Texas 75080-3021 | 972 883-2111 </p>
+<p> <a href="/emergency/">Emergency Preparedness</a> | <a href="http://www.utdallas.edu/oiec/title-ix">Nondiscrimination &#038; Title IX</a> | <a href="/links/">Required Links</a> | <a href="http://veterans.portal.texas.gov">Texas Veterans Portal</a> | <a href="http://www.utsystem.edu/">UT System</a></p>
+</div>
+
+			</footer>
+		</div>
+		
+			
+		</div>
+	</div>
+	<script src="/cdn-cgi/scripts/84a23a00/cloudflare-static/email-decode.min.js"></script><script src='/websvcs/templates/gateway/js/lastModified.js'></script>
+	<script type="text/javascript">
+// WebTrends SmartSource Data Collector Tag v10.2.91
+// Copyright (c) 2013 Webtrends Inc.  All rights reserved.
+// Tag Builder Version: 4.1.0.54
+// Created: 2013.06.05
+window.webtrendsAsyncInit=function(){
+    var dcs=new Webtrends.dcs().init({
+        dcsid:"dcsvxo7b700000gk6nbtgclkd_4w7j",
+        domain:"statse.webtrendslive.com",
+        timezone:-6,
+        i18n:true,
+        adimpressions:true,
+        adsparam:"WT.ac",
+        offsite:true,
+        download:true,
+        downloadtypes:"xls,doc,pdf,txt,csv,zip,docx,xlsx,rar,gzip",
+        anchor:true,
+        javascript: true,
+        onsitedoms:"utdallas.edu",
+        fpcdom:".utdallas.edu",
+        plugins:{
+            hm:{src:"//s.webtrends.com/js/webtrends.hm.js"},
+            facebook:{src:"//s.webtrends.com/js/webtrends.fb.js"},
+            yt:{src:"//s.webtrends.com/js/webtrends.yt.js"}			
+        }
+        }).track();
+};
+(function(){
+    var h=document.location.protocol;
+    var s=document.createElement("script"); s.async=true; s.src=h+"//www.utdallas.edu/websvcs/shared/webtrends.js";   
+    var s2=document.getElementsByTagName("script")[0]; s2.parentNode.insertBefore(s,s2);
+}());
+</script>
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-40160313-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments)};
+  gtag('js', new Date());
+
+  gtag('config', 'UA-40160313-2');
+</script>
+
+  </body>
+</html>
